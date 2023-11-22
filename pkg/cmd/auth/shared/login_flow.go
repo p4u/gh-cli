@@ -151,7 +151,6 @@ func Login(opts *LoginOptions) error {
 	var username string
 
 	if authMode == 0 {
-		fmt.Fprintf(opts.IO.ErrOut, "Scopes are: %s %s.\n", opts.Scopes, additionalScopes)
 		var err error
 		authToken, username, err = authflow.AuthFlow(hostname, opts.IO, "", append(opts.Scopes, additionalScopes...), opts.Interactive, opts.Browser)
 		if err != nil {
@@ -160,7 +159,6 @@ func Login(opts *LoginOptions) error {
 		fmt.Fprintf(opts.IO.ErrOut, "%s Authentication complete.\n", cs.SuccessIcon())
 	} else {
 		minimumScopes := append([]string{"public_repo"}, additionalScopes...)
-		fmt.Fprintf(opts.IO.ErrOut, "Scopes are: %s %s.\n", minimumScopes, additionalScopes)
 		fmt.Fprint(opts.IO.ErrOut, heredoc.Docf(`
 			Tip: you can generate a Personal Access Token here https://%s/settings/tokens
 			The minimum required scopes are %s.

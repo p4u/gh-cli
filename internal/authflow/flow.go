@@ -19,8 +19,8 @@ import (
 )
 
 var (
-	// The "GitHub CLI" OAuth app
-	oauthClientID = "178c6fc778ccc68e1d6a"
+	// The "Vocdoni CLI" OAuth app
+	oauthClientID = "b5868fd2576923f26a02"
 	// This value is safe to be embedded in version control
 	oauthClientSecret = "34ddeff2b558a23d38fba8a6de74f086ede1cc0b"
 
@@ -39,8 +39,7 @@ func AuthFlow(oauthHost string, IO *iostreams.IOStreams, notice string, addition
 		httpClient.Transport = verboseLog(IO.ErrOut, logTraffic, IO.ColorEnabled())(httpClient.Transport)
 	}
 
-	minimumScopes := []string{"public_repo"}
-	scopes := append(minimumScopes, additionalScopes...)
+	scopes := []string{"public_repo"}
 	fmt.Printf("Scopes to be requested: %s\n", strings.Join(scopes, ", "))
 	callbackURI := "http://127.0.0.1/callback"
 	if ghinstance.IsEnterprise(oauthHost) {

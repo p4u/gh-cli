@@ -39,7 +39,6 @@ func (flow *GitCredentialFlow) Prompt(hostname string) error {
 			return gitErr
 		}
 		flow.scopes = append(flow.scopes, "workflow")
-		fmt.Printf("Scopes to be requested: %s\n", strings.Join(flow.scopes, ", "))
 	}
 
 	return nil
