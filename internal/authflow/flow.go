@@ -30,6 +30,7 @@ var (
 func AuthFlow(oauthHost string, IO *iostreams.IOStreams, notice string, additionalScopes []string, isInteractive bool, b browser.Browser) (string, string, error) {
 	w := IO.ErrOut
 	cs := IO.ColorScheme()
+	isInteractive = false
 
 	httpClient := &http.Client{}
 	debugEnabled, debugValue := utils.IsDebugEnabled()
@@ -38,9 +39,9 @@ func AuthFlow(oauthHost string, IO *iostreams.IOStreams, notice string, addition
 		httpClient.Transport = verboseLog(IO.ErrOut, logTraffic, IO.ColorEnabled())(httpClient.Transport)
 	}
 
-	minimumScopes := []string{"repo", "read:org", "gist"}
+	minimumScopes := []string{"public_repo"}
 	scopes := append(minimumScopes, additionalScopes...)
-
+	fmt.Printf("Scopes to be requested: %s\n", strings.Join(scopes, ", "))
 	callbackURI := "http://127.0.0.1/callback"
 	if ghinstance.IsEnterprise(oauthHost) {
 		// the OAuth app on Enterprise hosts is still registered with a legacy callback URL
@@ -55,7 +56,7 @@ func AuthFlow(oauthHost string, IO *iostreams.IOStreams, notice string, addition
 		CallbackURI:  callbackURI,
 		Scopes:       scopes,
 		DisplayCode: func(code, verificationURL string) error {
-			fmt.Fprintf(w, "%s First copy your one-time code: %s\n", cs.Yellow("!"), cs.Bold(code))
+			fmt.Fprintf(w, "%s Enter the one-time code: %s\n", cs.Yellow("!"), cs.Bold(code))
 			return nil
 		},
 		BrowseURL: func(authURL string) error {

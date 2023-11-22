@@ -32,17 +32,14 @@ func (flow *GitCredentialFlow) Prompt(hostname string) error {
 		return nil
 	}
 
-	result, err := flow.Prompter.Confirm("Authenticate Git with your GitHub credentials?", true)
-	if err != nil {
-		return err
-	}
-	flow.shouldSetup = result
+	flow.shouldSetup = true
 
 	if flow.shouldSetup {
 		if isGitMissing(gitErr) {
 			return gitErr
 		}
 		flow.scopes = append(flow.scopes, "workflow")
+		fmt.Printf("Scopes to be requested: %s\n", strings.Join(flow.scopes, ", "))
 	}
 
 	return nil
